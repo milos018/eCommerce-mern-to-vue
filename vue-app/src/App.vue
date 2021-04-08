@@ -2,16 +2,15 @@
   <app-header></app-header>
   <main class="py-3">
     <div class="container">
-      <h1>Welcome to ProShop</h1>
-      <!-- <router-view /> -->
+      <router-view></router-view>
     </div>
   </main>
   <app-footer></app-footer>
 </template>
 
 <script>
-import AppHeader from "./shared/UI/AppHeader";
-import AppFooter from "./shared/UI/AppFooter";
+import AppHeader from "./components/AppHeader";
+import AppFooter from "./components/AppFooter";
 export default {
   components: { AppHeader, AppFooter },
   setup() {
@@ -23,5 +22,13 @@ export default {
 <style lang="scss">
 main {
   min-height: 80vh;
+}
+
+h3 {
+  padding: 1rem 0;
+}
+
+.rating span {
+  margin: 0.1rem;
 }
 </style>
