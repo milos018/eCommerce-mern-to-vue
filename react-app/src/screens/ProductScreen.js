@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from '../components/Rating';
-import products from '../products';
+import axios from 'axios';
 
 const ProductScreen = ({ match }) => {
-	const product = products.find(
-		(product) => product._id === match.params.productId,
-	);
+	const [product, setProduct] = useState([]);
+
+	useEffect(() => {
+		const getProduct = async () => {
+			try {
+				const response = await axios.get(
+					'http://localhost:5500/api/products/' + match.params.productId,
+				);
+				setProduct(response.data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		getProduct();
+	}, [match]);
 
 	return (
 		<>
@@ -25,7 +38,7 @@ const ProductScreen = ({ match }) => {
 						</ListGroup.Item>
 						<ListGroup.Item>
 							<Rating
-								value={product.rating}
+								value={+product.rating}
 								text={`${product.numReviews} reviews`}
 							/>
 						</ListGroup.Item>

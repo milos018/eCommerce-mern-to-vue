@@ -1,10 +1,26 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+const cors = require('cors');
 
-app.use(express.json())
+const products = require('./data/products');
 
-app.get('/', (req, res) => {
-  res.json("Hello")
-})
+app.use(express.json());
+app.use(cors());
 
-module.exports = app
+app.get('/api/products', (req, res) => {
+	res.json(products);
+});
+
+app.get('/api/products/:productId', (req, res) => {
+	const { productId } = req.params;
+	const product = products.find((product) => product._id === productId);
+	res.json(product);
+});
+
+app.get((error, req, res, next) => {
+	if (error) {
+		return res.json(error.message);
+	}
+});
+
+module.exports = app;

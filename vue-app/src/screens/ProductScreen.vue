@@ -12,7 +12,7 @@
         <div class="list-group-item">
           <div class="rating">
             <rating
-              :value="product.rating"
+              :value="+product.rating"
               :text="`${product.numReviews} reviews`"
             ></rating>
           </div>
@@ -59,15 +59,28 @@
 
 <script>
 import { useRoute } from "vue-router";
-import products from "../products";
+import axios from "axios";
 import Rating from "../components/Rating";
+import { ref } from "vue";
 export default {
   components: { Rating },
   setup() {
     const route = useRoute();
     const { productId } = route.params;
 
-    const product = products.find(p => p._id === productId);
+    const product = ref([]);
+    const getProducts = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5500/api/products/" + productId
+        );
+        product.value = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getProducts();
 
     return { product };
   }
