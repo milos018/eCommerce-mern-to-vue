@@ -11,7 +11,7 @@ const ProductScreen = ({ match }) => {
 		const getProduct = async () => {
 			try {
 				const response = await axios.get(
-					'http://localhost:5500/api/products/' + match.params.productId,
+					'http://localhost:5500/api/v1/products/' + match.params.productId,
 				);
 				setProduct(response.data);
 			} catch (error) {

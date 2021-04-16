@@ -72,7 +72,7 @@ export default {
     const getProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5500/api/products/" + productId
+          "http://localhost:5500/api/v1/products/" + productId
         );
         product.value = response.data;
       } catch (error) {

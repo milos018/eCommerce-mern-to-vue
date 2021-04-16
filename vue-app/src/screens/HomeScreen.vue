@@ -21,7 +21,9 @@ export default {
     const products = ref([]);
     const getProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5500/api/products");
+        const response = await axios.get(
+          "http://localhost:5500/api/v1/products"
+        );
         products.value = response.data;
       } catch (error) {
         console.log(error);

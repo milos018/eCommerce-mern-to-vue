@@ -1,26 +1,27 @@
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
 const cors = require('cors');
 
-const products = require('./data/products');
+// route imports
+const ProductRoutes = require('./routes/product.Routes');
 
+// custom middleware
+const { notFound, errorResponse } = require('./middleware/errorHandler');
+
+// register middleware
 app.use(express.json());
 app.use(cors());
 
-app.get('/api/products', (req, res) => {
-	res.json(products);
-});
+// register routes
+app.use('/api/v1/products', ProductRoutes);
 
-app.get('/api/products/:productId', (req, res) => {
-	const { productId } = req.params;
-	const product = products.find((product) => product._id === productId);
-	res.json(product);
-});
+// error handling middleware
+app.use(notFound);
+app.use(errorResponse);
 
-app.get((error, req, res, next) => {
-	if (error) {
-		return res.json(error.message);
-	}
-});
+// connect to DB
+require('./data/db.js')();
 
+// export to server.js
 module.exports = app;

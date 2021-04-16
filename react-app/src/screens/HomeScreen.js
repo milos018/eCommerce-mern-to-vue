@@ -8,7 +8,9 @@ const HomeScreen = () => {
 	useEffect(() => {
 		const getProducts = async () => {
 			try {
-				const response = await axios.get('http://localhost:5500/api/products');
+				const response = await axios.get(
+					'http://localhost:5500/api/v1/products',
+				);
 				setProducts(response.data);
 			} catch (error) {
 				console.log(error.message);
