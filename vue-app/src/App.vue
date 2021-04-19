@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import AppHeader from "./components/AppHeader";
-import AppFooter from "./components/AppFooter";
+import AppHeader from "./components/navigation/AppHeader";
+import AppFooter from "./components/navigation/AppFooter";
 export default {
   components: { AppHeader, AppFooter },
   setup() {
@@ -22,6 +22,16 @@ export default {
 <style lang="scss">
 main {
   min-height: 80vh;
+}
+
+h1 {
+  font-size: 1.8rem;
+  padding: 1rem 0;
+}
+
+h2 {
+  font-size: 1.4rem;
+  padding: 0.5rem 0;
 }
 
 h3 {

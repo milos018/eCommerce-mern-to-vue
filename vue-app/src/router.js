@@ -12,6 +12,15 @@ const routes = [
     name: "ProductScreen",
     component: () =>
       import(/* webpackChunkName: "single-product" */ "./screens/ProductScreen")
+  },
+  {
+    path: "/cart/:productId?",
+    name: "CartScreen",
+    component: () =>
+      import(/* webpackChunkName: "cart" */ "./screens/CartScreen")
+  },
+  {
+    path: "/login"
   }
 ];
 

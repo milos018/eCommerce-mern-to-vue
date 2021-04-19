@@ -1,6 +1,8 @@
 <template>
   <router-link to="/" class="btn btn-light my-3">Go Back</router-link>
-  <div class="row">
+  <app-loader v-if="isLoading"></app-loader>
+  <app-message v-if="error" variant="danger">{{ error }}</app-message>
+  <div v-if="!isLoading && !error" class="row">
     <div class="col-md-6">
       <img :src="product.image" :alt="product.name" class="img-fluid" />
     </div>
@@ -42,8 +44,24 @@
               </div>
             </div>
           </div>
+          <div v-if="product.countInStock > 0" class="list-group-item">
+            <div class="row">
+              <div class="col">Qty</div>
+              <div class="col">
+                <select class="form-control" v-model="qty">
+                  <option
+                    v-for="num in product.countInStock"
+                    :key="num"
+                    :value="num"
+                    >{{ num }}</option
+                  >
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="list-group-item">
             <button
+              @click="addToCartHandler"
               type="button"
               class="btn-block btn btn-primary"
               :disabled="product.countInStock === 0"
@@ -58,31 +76,30 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
-import axios from "axios";
-import Rating from "../components/Rating";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
+import Rating from "../components/product/Rating";
 export default {
   components: { Rating },
   setup() {
-    const route = useRoute();
-    const { productId } = route.params;
+    const { productId } = useRoute().params;
+    const { dispatch, state } = useStore();
 
-    const product = ref([]);
-    const getProducts = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5500/api/v1/products/" + productId
-        );
-        product.value = response.data;
-      } catch (error) {
-        console.log(error);
-      }
+    dispatch("listProductDetails", productId);
+
+    const isLoading = computed(() => state.productStore.isLoading);
+    const error = computed(() => state.productStore.error);
+    const product = computed(() => state.productStore.product);
+
+    const qty = ref(1);
+    const { push } = useRouter();
+
+    const addToCartHandler = () => {
+      push("/cart/" + productId + "?qty=" + qty.value);
     };
 
-    getProducts();
-
-    return { product };
+    return { qty, isLoading, error, product, addToCartHandler };
   }
 };
 </script>

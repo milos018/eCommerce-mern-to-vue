@@ -1,6 +1,8 @@
 <template>
   <h1>Latest Products</h1>
-  <div class="row">
+  <app-loader v-if="isLoading"></app-loader>
+  <app-message v-if="error" variant="danger">{{ error }}</app-message>
+  <div v-if="!isLoading && !error" class="row">
     <div
       v-for="product in products"
       :key="product._id"
@@ -12,27 +14,22 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import Product from "../components/Product";
-import axios from "axios";
+import { computed } from "vue";
+import { useStore } from "vuex";
+import Product from "../components/product/Product";
+
 export default {
   components: { Product },
   setup() {
-    const products = ref([]);
-    const getProducts = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5500/api/v1/products"
-        );
-        products.value = response.data;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getProducts();
-    return { products };
+    const { dispatch, state } = useStore();
+
+    dispatch("listProducts");
+
+    const isLoading = computed(() => state.productStore.isLoading);
+    const error = computed(() => state.productStore.error);
+    const products = computed(() => state.productStore.products);
+
+    return { isLoading, error, products };
   }
 };
 </script>
-
-<style></style>
